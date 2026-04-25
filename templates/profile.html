@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 style="margin: 0;">👤 ПРОФИЛЬ</h3>
+            </div>
+            <div class="card-body">
+                <p style="font-size: 1.3rem;"><strong>Имя:</strong> {{ current_user.username }}</p>
+                <p style="font-size: 1.3rem;"><strong>Дата регистрации:</strong> {{ current_user.created_date.strftime('%d.%m.%Y') }}</p>
+                <hr>
+                <h4>📊 СТАТИСТИКА</h4>
+                <p style="font-size: 1.2rem;">⭐ Избранных мест: <strong>{{ favorites|length }}</strong></p>
+                <p style="font-size: 1.2rem;">📋 Создано маршрутов: <strong>{{ routes|length }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h3 style="margin: 0;">📋 МОИ МАРШРУТЫ</h3>
+                <a href="/route/create" class="btn btn-light btn-lg" style="font-size: 1rem;">➕ СОЗДАТЬ МАРШРУТ</a>
+            </div>
+            <div class="card-body">
+                {% if routes %}
+                    <div class="list-group">
+                        {% for route in routes %}
+                        <div class="list-group-item" style="padding: 15px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 style="font-size: 1.3rem; margin-bottom: 10px;">{{ route.name }}</h4>
+                                    <p style="font-size: 1.1rem; margin-bottom: 5px;">{{ route.description or 'Нет описания' }}</p>
+                                    <p style="font-size: 1rem; color: #6c757d;">
+                                        📍 Мест: {{ route.places|length }} | 📅 {{ route.created_date.strftime('%d.%m.%Y') }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <a href="/route/{{ route.id }}" class="btn btn-info btn-lg">👁️ ПОСМОТРЕТЬ</a>
+                                    <a href="/route/delete/{{ route.id }}" class="btn btn-danger btn-lg" onclick="return confirm('Удалить маршрут?')">🗑️</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <p>У вас пока нет маршрутов</p>
+                        <a href="/route/create" class="btn btn-success">➕ СОЗДАТЬ ПЕРВЫЙ МАРШРУТ</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h3 style="margin: 0;">⭐ ИЗБРАННЫЕ МЕСТА</h3>
+            </div>
+            <div class="card-body">
+                {% if favorites %}
+                    <div class="row">
+                        {% for place in favorites %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 style="font-size: 1.2rem;">{{ place.name }}</h4>
+                                    <p style="font-size: 0.95rem; color: #6c757d;">{{ place.city or 'Неизвестный город' }}</p>
+
+                                    <select id="route_select_{{ place.id }}" class="form-select mb-2">
+                                        <option value="">-- Выбрать маршрут --</option>
+                                        {% for route in routes %}
+                                        <option value="{{ route.id }}">{{ route.name }}</option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <div class="mt-2">
+                                        <button onclick="addToRoute({{ place.id }})" class="btn btn-success btn-sm w-100 mb-2">➕ В МАРШРУТ</button>
+                                        <a href="/place/remove_favorite/{{ place.id }}" class="btn btn-danger btn-sm w-100" onclick="return confirm('Удалить из избранного?')">🗑️ УДАЛИТЬ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <p>У вас пока нет избранных мест</p>
+                        <a href="/map" class="btn btn-primary">🗺️ ДОБАВИТЬ С КАРТЫ</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addToRoute(placeId) {
+    var select = document.getElementById('route_select_' + placeId);
+    var routeId = select.value;
+    if (routeId) {
+        window.location.href = '/place/add_favorite_to_route/' + placeId + '/' + routeId;
+    } else {
+        alert('Выберите маршрут!');
+    }
+}
+</script>
+{% endblock %}

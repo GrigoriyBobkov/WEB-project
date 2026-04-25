@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h3 style="margin: 0;">🗺️ {{ route.name }}</h3>
+                <div>
+                    <a href="/profile" class="btn btn-light btn-lg" style="font-size: 1rem;">🔙 НАЗАД</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <p style="font-size: 1.2rem;"><strong>📝 Описание:</strong> {{ route.description or 'Нет описания' }}</p>
+                <p style="font-size: 1.1rem;"><strong>📅 Создан:</strong> {{ route.created_date.strftime('%d.%m.%Y') }}</p>
+
+                <hr>
+
+                <h3 style="margin: 20px 0 15px 0;">📍 МЕСТА В МАРШРУТЕ ({{ route.places|length }})</h3>
+
+                {% if route.places %}
+                    <div class="list-group">
+                        {% for place in route.places %}
+                        <div class="list-group-item" style="padding: 15px; margin-bottom: 10px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 style="font-size: 1.2rem; margin-bottom: 5px;">{{ loop.index }}. {{ place.name }}</h4>
+                                    <p style="font-size: 1rem; margin-bottom: 5px;">📍 {{ place.address or 'Адрес не указан' }}</p>
+                                    <p style="font-size: 0.95rem; color: #6c757d;">{{ place.city or 'Неизвестный город' }} | {{ place.place_type }}</p>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="/place/open_on_map/{{ place.id }}" class="btn btn-info btn-lg" style="font-size: 1rem;">🗺️ ОТКРЫТЬ НА КАРТЕ</a>
+                                    <a href="/place/remove_from_route/{{ place.id }}" class="btn btn-danger btn-lg" style="font-size: 1rem;" onclick="return confirm('Удалить место из маршрута?')">🗑️</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning text-center" style="display: block; font-size: 1.2rem; padding: 40px;">
+                        <p>В маршруте пока нет мест</p>
+                        <p>Добавьте места через <a href="/map" class="btn btn-success btn-sm">КАРТУ</a></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

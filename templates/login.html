@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5">
+        <div class="card card-custom p-4">
+            <h1 class="text-center mb-4" style="color: #28a745; white-space: nowrap;">🔐 ВХОД В СИСТЕМУ</h1>
+
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-4">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", placeholder="Введите имя пользователя") }}
+                    {% for error in form.username.errors %}
+                        <div class="text-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control", placeholder="Введите пароль") }}
+                    {% for error in form.password.errors %}
+                        <div class="text-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                {{ form.submit(class="btn btn-success w-100 btn-submit") }}
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="/register" style="font-size: 1.1rem;">Нет аккаунта? Зарегистрируйтесь</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

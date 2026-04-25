@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-4">
+        <h1 style="font-size: 2.5rem;">🗺️ КАРТА МИРА</h1>
+        <p class="lead">Введите место и добавьте его в маршрут или избранное</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 style="margin: 0;">🔍 ПОИСК МЕСТА</h4>
+            </div>
+            <div class="card-body">
+                <form action="/search" method="post">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 1.1rem;">НАЗВАНИЕ МЕСТА:</label>
+                        <input type="text" name="city" class="form-control form-control-lg"
+                               placeholder="Например: Москва, Париж, Лондон" required
+                               value="{{ city_name if city_name else '' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 1.1rem;">МАСШТАБ КАРТЫ:</label>
+                        <input type="range" name="zoom" class="form-range" min="10" max="20" step="1"
+                               value="{{ zoom if zoom else 15 }}" onchange="this.nextElementSibling.innerText = this.value">
+                        <div class="text-center mt-2">
+                            <span style="font-size: 1.2rem; font-weight: bold;">{{ zoom if zoom else 15 }}</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100" style="font-size: 1.2rem;">ПОКАЗАТЬ КАРТУ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if map_url %}
+<div class="row mt-4">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 style="margin: 0;">🗺️ {{ city_name }}</h4>
+            </div>
+            <div class="card-body text-center">
+                <img src="{{ map_url }}" class="img-fluid rounded" alt="Карта" style="max-width: 100%; border-radius: 10px;">
+                <div class="mt-3 alert alert-success" style="display: block; font-size: 1rem;">
+                    ✅ {{ city_name }} на карте
+                </div>
+
+                <!-- ДВЕ КНОПКИ ДЛЯ ДОБАВЛЕНИЯ -->
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <form action="/place/add_to_route_from_map" method="post">
+                            <input type="hidden" name="place_name" value="{{ city_name }}">
+                            <input type="hidden" name="place_city" value="{{ city_name }}">
+                            <select name="route_id" class="form-select mb-2" required>
+                                <option value="">-- Выбрать маршрут --</option>
+                                {% for route in routes %}
+                                <option value="{{ route.id }}">{{ route.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-success w-100">➕ ДОБАВИТЬ В МАРШРУТ</button>
+                        </form>
+                        {% if not routes %}
+                        <small class="text-muted">Нет маршрутов? <a href="/route/create">Создайте</a> сначала!</small>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <form action="/place/add_to_favorite_from_map" method="post">
+                            <input type="hidden" name="place_name" value="{{ city_name }}">
+                            <input type="hidden" name="place_city" value="{{ city_name }}">
+                            <button type="submit" class="btn btn-warning w-100">⭐ ДОБАВИТЬ В ИЗБРАННОЕ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif city_name %}
+<div class="row mt-4">
+    <div class="col-md-8 mx-auto">
+        <div class="alert alert-danger">
+            ⚠️ Не удалось загрузить карту для города "{{ city_name }}"
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row mt-4">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <div style="background: #e9ecef; border-radius: 15px; padding: 60px; color: #6c757d;">
+                    <h3>🗺️ Введите место и нажмите "Показать карту"</h3>
+                    <p>Например: Москва, Париж, Невский проспект</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

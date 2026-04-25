@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-8 text-center">
+        <div class="card card-custom p-5">
+            <h1 class="mb-4" style="color: #667eea;">🌍 TRAVEL PLANNER</h1>
+            <p class="lead mb-5" style="font-size: 1.3rem;">Планируйте свои путешествия вместе с нами!</p>
+
+            {% if current_user.is_authenticated %}
+                <div class="mb-4">
+                    <h2>👋 Привет, {{ current_user.username }}!</h2>
+                    <p class="mt-3" style="font-size: 1.2rem;">Вы успешно вошли в систему</p>
+
+                    <!-- КНОПКИ ДЛЯ АВТОРИЗОВАННОГО ПОЛЬЗОВАТЕЛЯ -->
+                    <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+                        <a href="/map" class="btn btn-primary btn-custom" style="font-size: 1.2rem;">
+                            🗺️ КАРТА
+                        </a>
+                        <a href="/profile" class="btn btn-info btn-custom" style="font-size: 1.2rem; background-color: #17a2b8; border-color: #17a2b8;">
+                            👤 МОЙ ПРОФИЛЬ
+                        </a>
+                        <a href="/logout" class="btn btn-danger btn-custom" style="font-size: 1.2rem;">
+                            🚪 ВЫЙТИ
+                        </a>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-light rounded" style="background: #f8f9fa;">
+                        <p style="font-size: 1rem;">📌 <strong>Что можно сделать:</strong></p>
+                        <ul style="text-align: left; font-size: 0.95rem;">
+                            <li>🗺️ <strong>Карта</strong> - искать отели и достопримечательности в городах</li>
+                            <li>⭐ <strong>Избранное</strong> - сохранять понравившиеся места</li>
+                            <li>📋 <strong>Маршруты</strong> - создавать маршруты путешествий</li>
+                            <li>👤 <strong>Профиль</strong> - управлять сохранёнными местами и маршрутами</li>
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <div class="d-flex justify-content-center gap-4 flex-wrap">
+                    <a href="/register" class="btn btn-primary btn-custom">📝 ЗАРЕГИСТРИРОВАТЬСЯ</a>
+                    <a href="/login" class="btn btn-success btn-custom">🔐 ВОЙТИ</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

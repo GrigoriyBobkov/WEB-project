@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 style="margin: 0;">➕ ДОБАВИТЬ МЕСТО В МАРШРУТ "{{ route.name }}"</h4>
+            </div>
+            <div class="card-body">
+                {% if places %}
+                    <form action="" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">ВЫБЕРИТЕ МЕСТО:</label>
+                            <select name="place_id" class="form-select form-select-lg" required>
+                                <option value="">-- Выберите место --</option>
+                                {% for place in places %}
+                                <option value="{{ place.id }}">
+                                    {{ place.name }} ({{ place.city }} - {{ place.place_type }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 btn-lg">➕ ДОБАВИТЬ</button>
+                    </form>
+                {% else %}
+                    <div class="alert alert-warning text-center">
+                        <p>У вас нет избранных мест, которые можно добавить в маршрут</p>
+                        <a href="/map" class="btn btn-primary">🔍 НАЙТИ МЕСТА</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer text-center">
+                <a href="/route/{{ route.id }}" class="btn btn-secondary">🔙 НАЗАД К МАРШРУТУ</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

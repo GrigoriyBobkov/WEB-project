@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Travel Planner - {{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Стили для навигации */
+        .navbar-custom {
+            background-color: #2c3e50 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #f39c12 !important;
+        }
+
+        .btn-custom {
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+        }
+
+        .card-custom {
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: white;
+        }
+
+        .form-control {
+            font-size: 1.2rem;
+            padding: 12px 20px;
+            border-radius: 10px;
+        }
+
+        .form-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .btn-submit {
+            font-size: 1.3rem;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Убираем всплывающие сообщения */
+        .alert {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- НАВИГАЦИОННОЕ МЕНЮ -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="font-size: 1.5rem;">🌍 Travel Planner</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/map" style="font-size: 1.1rem;">🗺️ КАРТА</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile" style="font-size: 1.1rem;">👤 ПРОФИЛЬ</a>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link" style="color: #f39c12;">👋 {{ current_user.username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout" style="font-size: 1.1rem;">🚪 ВЫЙТИ</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login" style="font-size: 1.1rem;">🔐 ВОЙТИ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register" style="font-size: 1.1rem;">📝 РЕГИСТРАЦИЯ</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
